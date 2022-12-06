@@ -13,7 +13,7 @@ def index():
 def novo():
     if 'usuario_logado' not in  session or session['usuario_logado'] == None:
         flash('Acesso não permitido...')
-        return redirect(url_for('login',proxima=url_for('novo')))
+        return redirect(url_for('login', proxima=url_for('novo')))
     else:
         return render_template("novo.html", titulo="cadastrar novo jogo", titulo_pagina="Cadastro de jogos")
 
@@ -42,7 +42,7 @@ def criar():
 def editar(id):
     if 'usuario_logado' not in  session or session['usuario_logado'] == None:
         flash('Acesso não permitido...')
-        return redirect(url_for('login',proxima=url_for('editar')))
+        return redirect(url_for('login',proxima=url_for('editar',id=id)))
     else:
         jogo = Jogos.query.filter_by(id=id).first()
         return render_template("editar.html", titulo="Editando jogo", titulo_pagina="Edição de jogos", jogo=jogo)
@@ -50,7 +50,31 @@ def editar(id):
 
 @app.route('/atualizar', methods=['POST'])
 def atualizar():
-    pass
+    id = request.form['id']
+    jogo = Jogos.query.filter_by(id=id).first()
+    jogo.nome = request.form['nome']
+    jogo.categoria = request.form['categoria']
+    jogo.console = request.form['console']
+
+    db.session.add(jogo)
+    db.session.commit()
+
+    return redirect(url_for('index'))
+
+
+# DELETE
+
+@app.route('/excluir/<int:id>')
+def excluir(id):
+    if 'usuario_logado' not in  session or session['usuario_logado'] == None:
+        flash('Acesso não permitido...')
+        return redirect(url_for('login'))
+    else:
+        Jogos.query.filter_by(id=id).delete()
+        db.session.commit()
+        flash('Jogo deletado com sucesso!')
+
+        return redirect(url_for('index'))
 
 
 @app.route('/login')

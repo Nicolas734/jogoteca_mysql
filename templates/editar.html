@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 {% block conteudo %}
             <form method="post" action="{{ url_for('atualizar') }}">
+                <input type="hidden" name="id" value="{{ jogo.id }}">
                 <fieldset>
                 <div class="form-group">
                     <label for="nome">Nome</label>
