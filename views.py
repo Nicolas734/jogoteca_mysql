@@ -15,7 +15,7 @@ def novo():
         flash('Acesso não permitido...')
         return redirect(url_for('login', proxima=url_for('novo')))
     else:
-        return render_template("novo.html", titulo="cadastrar novo jogo", titulo_pagina="Cadastro de jogos")
+        return render_template("novo.html", titulo="Cadastrar novo jogo", titulo_pagina="Cadastro de jogos")
 
 
 @app.route('/criar', methods=['POST'])
@@ -32,6 +32,10 @@ def criar():
         novo_jogo = Jogos(nome=nome, categoria=categoria, console=console)
         db.session.add(novo_jogo)
         db.session.commit()
+
+        arquivo = request.files['arquivo']
+        print(arquivo.filename)
+        arquivo.save(f'uploads/{arquivo.filename}')
 
     return redirect(url_for('index'))
 
