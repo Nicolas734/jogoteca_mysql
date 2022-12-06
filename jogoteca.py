@@ -28,7 +28,7 @@ class Jogos(db.Model):
     console = db.Column(db.String(20), nullable = False)
 
     def __repr__(self):
-        return '<Name %r>' % self.name
+        return '<Name %r>' % self.nome
 
 class Usuarios(db.Model):
     username = db.Column(db.String(50), primary_key = True)
@@ -36,15 +36,16 @@ class Usuarios(db.Model):
     senha = db.Column(db.String(100), nullable = False)
 
     def __repr__(self):
-        return '<Name %r>' % self.name
+        return '<Name %r>' % self.username
 
 
 @app.route('/')
 def index():
-    return render_template('lista.html', titulo='Jogos', titulo_pagina="Jogoteca")
+    lista = Jogos.query.order_by(Jogos.id)
+    return render_template('lista.html', titulo='Jogos', titulo_pagina="Jogoteca", jogos = lista)
 
 
-@app.route('/novo_jogo')
+@app.route('/novo')
 def novo():
     if 'usuario_logado' not in  session or session['usuario_logado'] == None:
         flash('Acesso não permitido...')
@@ -58,8 +59,17 @@ def criar():
     nome = request.form['nome']
     categoria = request.form['categoria']
     console = request.form['console']
-    jogo = Jogo(nome, categoria, console)
-    lista.append(jogo)
+    
+    jogo = Jogos.query.filter_by(nome=nome).first()
+    print(jogo)
+    if jogo:
+        flash("Jogo já existente...")
+        return redirect(url_for('index'))
+    else:
+        novo_jogo = Jogos(nome=nome, categoria=categoria, console=console)
+        db.session.add(novo_jogo)
+        db.session.commit()
+
     return redirect(url_for('index'))
 
 
@@ -71,8 +81,8 @@ def login():
 
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
-    if request.form['usuario'] in usuarios:
-        usuario = usuarios[request.form['usuario']]
+    usuario = Usuarios.query.filter_by(username=request.form['usuario']).first()
+    if usuario:
         if request.form['senha'] == usuario.senha:
             session['usuario_logado'] = usuario.username
             flash(usuario.username + ' logado com sucesso...')
