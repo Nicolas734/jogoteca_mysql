@@ -1,3 +1,5 @@
+import os
+
 SECRET_KEY = 'lira'
 
 # configurações de conexão do banco
@@ -9,3 +11,6 @@ SQLALCHEMY_DATABASE_URI = \
         servidor = 'localhost',
         database = 'jogoteca'
     )
+
+# caminho relativo da pasta uploads
+UPLOADS_PATH = os.path.dirname(os.path.abspath(__file__)) + '/uploads'
