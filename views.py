@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, session, flash, url_for, s
 from jogoteca import db, app
 import time
 
-from helpers import recupera_imagem, deleta_arquivo
+from helpers import recupera_imagem, deleta_arquivo, Formulario_jogo
 
 from models import Jogos, Usuarios
 
@@ -18,14 +18,20 @@ def novo():
         flash('Acesso não permitido...')
         return redirect(url_for('login', proxima=url_for('novo')))
     else:
-        return render_template("novo.html", titulo="Cadastrar novo jogo", titulo_pagina="Cadastro de jogos")
+        formulario = Formulario_jogo()
+        return render_template("novo.html", titulo="Cadastrar novo jogo", titulo_pagina="Cadastro de jogos", formulario=formulario)
 
 
 @app.route('/criar', methods=['POST'])
 def criar():
-    nome = request.form['nome']
-    categoria = request.form['categoria']
-    console = request.form['console']
+    formulario = Formulario_jogo(request.form)
+
+    if not formulario.validate_on_submit():
+        redirect(url_for('novo'))
+
+    nome = formulario.nome.data
+    categoria = formulario.categoria.data
+    console = formulario.console.data
     jogo = Jogos.query.filter_by(nome=nome).first()
 
     if jogo:
@@ -106,11 +112,11 @@ def autenticar():
             session['usuario_logado'] = usuario.username
             flash(usuario.username + ' logado com sucesso...')
             proxima_pagina = request.form['proxima']
-            
+            print(proxima_pagina)
             if(proxima_pagina is None):
-                return redirect(proxima_pagina)
-            else:
                 return redirect(url_for('index'))
+            else:
+                return redirect(proxima_pagina)
     else:
         flash('Usuario não logado...')
         return redirect(url_for('login'))
