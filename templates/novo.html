@@ -14,25 +14,25 @@
                 </figure>
 
                 <fieldset>
-                <div class="form-group">
-                    {{ formulario.nome.label(class="form-lavel") }}
-                    {{ formulario.nome(class="form-control") }}
-                </div>
-                <div class="form-group">
-                    {{ formulario.categoria.label(class="form-lavel") }}
-                    {{ formulario.categoria(class="form-control") }}
-                </div>
-                <div class="form-group">
-                    {{ formulario.console.label(class="form-lavel") }}
-                    {{ formulario.console(class="form-control") }}
-                </div>
-                <div>
-                    {{ formulario.salvar(class="btn btn-success btn-salvar") }}
-                </div>
+                    {{ formulario.csrf_token() }}
+                    <div class="form-group">
+                        {{ formulario.nome.label(class="form-lavel") }}
+                        {{ formulario.nome(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ formulario.categoria.label(class="form-lavel") }}
+                        {{ formulario.categoria(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ formulario.console.label(class="form-lavel") }}
+                        {{ formulario.console(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ formulario.salvar(class="btn btn-success btn-salvar") }}
+                        <a class="btn btn-primary" href="{{ url_for('index') }}"> Voltar</a>
+                    </div>
                 </fieldset>
 
             </form>
-
-            <a class="btn btn-primary" href="{{ url_for('index') }}"> Voltar</a>
 
 {% endblock %}

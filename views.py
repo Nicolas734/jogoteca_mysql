@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, session, flash, url_for, s
 from jogoteca import db, app
 import time
 
-from helpers import recupera_imagem, deleta_arquivo, Formulario_jogo
+from helpers import recupera_imagem, deleta_arquivo, Formulario_jogo, Formulario_login
 
 from models import Jogos, Usuarios
 
@@ -59,26 +59,35 @@ def editar(id):
         return redirect(url_for('login',proxima=url_for('editar',id=id)))
     else:
         jogo = Jogos.query.filter_by(id=id).first()
+        formulario = Formulario_jogo()
+        formulario.nome.data = jogo.nome
+        formulario.categoria.data = jogo.categoria
+        formulario.console.data = jogo.console
         capa_jogo = recupera_imagem(id, jogo)
-        return render_template("editar.html", titulo="Editando jogo", titulo_pagina="Edição de jogos", jogo=jogo, capa_jogo=capa_jogo)
+        return render_template("editar.html", titulo="Editando jogo", titulo_pagina="Edição de jogos", id=id, capa_jogo=capa_jogo, formulario=formulario)
 
 
 @app.route('/atualizar', methods=['POST'])
 def atualizar():
     id = request.form['id']
     jogo = Jogos.query.filter_by(id=id).first()
-    jogo.nome = request.form['nome']
-    jogo.categoria = request.form['categoria']
-    jogo.console = request.form['console']
 
-    db.session.add(jogo)
-    db.session.commit()
+    formulario = Formulario_jogo(request.form)
 
-    arquivo = request.files['arquivo']
-    uploads_path = app.config['UPLOADS_PATH']
-    timestamp = time.time()
-    deleta_arquivo(jogo)
-    arquivo.save(f'{uploads_path}/capa_{jogo.nome.lower().replace(" ","_")}_{jogo.id}-{timestamp}.jpg')
+    if formulario.validate_on_submit():
+
+        jogo.nome = formulario.nome.data
+        jogo.categoria = formulario.categoria.data
+        jogo.console = formulario.console.data
+
+        db.session.add(jogo)
+        db.session.commit()
+
+        arquivo = request.files['arquivo']
+        uploads_path = app.config['UPLOADS_PATH']
+        timestamp = time.time()
+        deleta_arquivo(jogo)
+        arquivo.save(f'{uploads_path}/capa_{jogo.nome.lower().replace(" ","_")}_{jogo.id}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
@@ -101,22 +110,20 @@ def excluir(id):
 @app.route('/login')
 def login():
     proxima = request.args.get('proxima')
-    return render_template('login.html', titulo="Login de Usuario", titulo_pagina="Login", proxima=proxima)
+    formulario = Formulario_login()
+    return render_template('login.html', titulo="Login de Usuario", titulo_pagina="Login", proxima=proxima, formulario=formulario)
 
 
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
-    usuario = Usuarios.query.filter_by(username=request.form['usuario']).first()
+    formulario = Formulario_login(request.form)
+    usuario = Usuarios.query.filter_by(username=formulario.username.data).first()
     if usuario:
-        if request.form['senha'] == usuario.senha:
+        if formulario.senha.data == usuario.senha:
             session['usuario_logado'] = usuario.username
             flash(usuario.username + ' logado com sucesso...')
             proxima_pagina = request.form['proxima']
-            print(proxima_pagina)
-            if(proxima_pagina is None):
-                return redirect(url_for('index'))
-            else:
-                return redirect(proxima_pagina)
+            return redirect(proxima_pagina)
     else:
         flash('Usuario não logado...')
         return redirect(url_for('login'))

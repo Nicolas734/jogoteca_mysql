@@ -1,7 +1,7 @@
 from jogoteca import app
 import os
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, validators
+from wtforms import StringField, SubmitField, PasswordField, validators
 
 
 class Formulario_jogo(FlaskForm):
@@ -9,6 +9,12 @@ class Formulario_jogo(FlaskForm):
     categoria = StringField('Categoria', [validators.data_required(), validators.length(min=1, max=40)])
     console = StringField('Console', [validators.data_required(), validators.length(min=1, max=20)])
     salvar = SubmitField('Salvar')
+
+
+class Formulario_login(FlaskForm):
+    username = StringField('Nome de usuario', [validators.data_required(), validators.length(min=1, max=50)])
+    senha = PasswordField('Senha', [validators.data_required(), validators.length(min=1, max=100)])
+    login = SubmitField('Entrar')
 
 
 def recupera_imagem(id,jogo):
