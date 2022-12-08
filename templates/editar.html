@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 {% block conteudo %}
             <form method="post" action="{{ url_for('atualizar') }}" enctype="multipart/form-data">
+
                 <figure class="img thumbnail col-md-4">
                     <img class="img-fluid" src="{{ url_for('imagem', nome_arquivo=capa_jogo) }}">
                     <figcaption>
@@ -10,7 +11,9 @@
                     </label>
                     </figcaption>
                 </figure>
+
                 <input type="hidden" name="id" value="{{ jogo.id }}">
+
                 <fieldset>
                     <div class="form-group">
                         <label for="nome">Nome</label>
@@ -24,7 +27,10 @@
                         <label for="console">Console</label>
                         <input type="text" id="console" name="console" class="form-control" value="{{ jogo.console }}">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+                    <button type="submit" class="btn btn-success btn-salvar">Salvar</button>
                 </fieldset>
+
             </form>
+
+            <a class="btn btn-primary" href="{{ url_for('index') }}">Voltar</a>
 {% endblock %}

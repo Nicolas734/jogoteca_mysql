@@ -110,7 +110,7 @@ def autenticar():
             if(proxima_pagina is None):
                 return redirect(proxima_pagina)
             else:
-                return redirect(url_for('novo'))
+                return redirect(url_for('index'))
     else:
         flash('Usuario não logado...')
         return redirect(url_for('login'))
@@ -120,7 +120,7 @@ def autenticar():
 def logout():
     session['usuario_logado'] = None
     flash('Logout efetuado com sucesso...')
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 @app.route('/uploads/<nome_arquivo>')
 def imagem(nome_arquivo):
