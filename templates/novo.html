@@ -1,9 +1,9 @@
 {% extends "template.html" %}
 {% block conteudo %}
 
-            <form method="post" action="{{ url_for('criar') }}" enctype="multipart/form-data">
+            <form class="formularioJogo" method="post" action="{{ url_for('criar') }}" enctype="multipart/form-data">
 
-                <figure class="img thumbnail col-md-4">
+                <figure class="img thumbnail col-md-4 formularioImagem">
                     <img class="img-fluid" src="{{ url_for('imagem', nome_arquivo='capa_padrao.jpg') }}">
                     <figcaption>
                     <label class="fileContainer">
@@ -15,19 +15,19 @@
 
                 <fieldset>
                     {{ formulario.csrf_token() }}
-                    <div class="form-group">
+                    <div class="form-group inputBox">
                         {{ formulario.nome.label(class="form-lavel") }}
                         {{ formulario.nome(class="form-control") }}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group inputBox">
                         {{ formulario.categoria.label(class="form-lavel") }}
                         {{ formulario.categoria(class="form-control") }}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group inputBox">
                         {{ formulario.console.label(class="form-lavel") }}
                         {{ formulario.console(class="form-control") }}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group buttons">
                         {{ formulario.salvar(class="btn btn-success btn-salvar") }}
                         <a class="btn btn-primary" href="{{ url_for('index') }}"> Voltar</a>
                     </div>
