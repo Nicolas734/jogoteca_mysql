@@ -1,7 +1,8 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from jogoteca import db, app
+import time
 
-from helpers import recupera_imagem
+from helpers import recupera_imagem, deleta_arquivo
 
 from models import Jogos, Usuarios
 
@@ -37,7 +38,8 @@ def criar():
 
         arquivo = request.files['arquivo']
         uploads_path = app.config['UPLOADS_PATH']
-        arquivo.save(f'{uploads_path}/capa_{novo_jogo.nome.lower().replace(" ","_")}_{novo_jogo.id}.jpg')
+        timestamp = time.time()
+        arquivo.save(f'{uploads_path}/capa_{novo_jogo.nome.lower().replace(" ","_")}_{novo_jogo.id}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
@@ -68,7 +70,9 @@ def atualizar():
 
     arquivo = request.files['arquivo']
     uploads_path = app.config['UPLOADS_PATH']
-    arquivo.save(f'{uploads_path}/capa_{jogo.nome.lower().replace(" ","_")}_{jogo.id}.jpg')
+    timestamp = time.time()
+    deleta_arquivo(jogo)
+    arquivo.save(f'{uploads_path}/capa_{jogo.nome.lower().replace(" ","_")}_{jogo.id}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
