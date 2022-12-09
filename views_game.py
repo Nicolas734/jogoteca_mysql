@@ -45,7 +45,7 @@ def criar():
         arquivo = request.files['arquivo']
         uploads_path = app.config['UPLOADS_PATH']
         timestamp = time.time()
-        arquivo.save(f'{uploads_path}/capa_{novo_jogo.nome.lower().replace(" ","_")}_{jogo.id}-{timestamp}.jpg')
+        arquivo.save(f'{uploads_path}/capa_{novo_jogo.nome.lower().replace(" ","_")}_{novo_jogo.id}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
