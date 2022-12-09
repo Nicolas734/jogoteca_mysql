@@ -39,7 +39,7 @@ TABLES['jogos'] = ('''
 
 TABLES['usuarios'] = ('''
     CREATE TABLE `usuarios` (
-        `nome` varchar(20) NOT NULL,
+        `nome` varchar(50) NOT NULL,
         `username` varchar(50) NOT NULL,
         `senha` varchar(100) NOT NULL,
         PRIMARY KEY (`username`)

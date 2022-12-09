@@ -2,9 +2,9 @@ from flask import render_template, request, redirect, session, flash, url_for, s
 from jogoteca import db, app
 import time
 
-from helpers import recupera_imagem, deleta_arquivo, Formulario_jogo, Formulario_login
+from helpers import recupera_imagem, deleta_arquivo, Formulario_jogo
 
-from models import Jogos, Usuarios
+from models import Jogos
 
 @app.route('/')
 def index():

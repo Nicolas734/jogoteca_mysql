@@ -8,7 +8,13 @@ class Formulario_jogo(FlaskForm):
     nome = StringField('Nome do jogo', [validators.data_required(), validators.length(min=1, max=50)])
     categoria = StringField('Categoria', [validators.data_required(), validators.length(min=1, max=40)])
     console = StringField('Console', [validators.data_required(), validators.length(min=1, max=20)])
-    salvar = SubmitField('Salvar')
+    salvar = SubmitField('Salvar jogo')
+
+class Formulario_usuario(FlaskForm):
+    nome = StringField('Nome', [validators.data_required(), validators.length(min=1, max=50)])
+    username = StringField('Nome de usuario', [validators.data_required(), validators.length(min=1, max=50)])
+    senha = PasswordField('Senha', [validators.data_required(), validators.length(min=1, max=100)])
+    salvar = SubmitField('Salvar usuario')
 
 
 class Formulario_login(FlaskForm):

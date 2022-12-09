@@ -1,0 +1,28 @@
+{% extends "template.html" %}
+{% block conteudo %}
+
+<form class="formularioJogo" method="post" action="{{ url_for('criar_usuario') }}" enctype="multipart/form-data">
+
+    <fieldset>
+        {{ formulario.csrf_token() }}
+        <div class="form-group inputBox">
+            {{ formulario.nome.label(class="form-lavel") }}
+            {{ formulario.nome(class="form-control") }}
+        </div>
+        <div class="form-group inputBox">
+            {{ formulario.username.label(class="form-lavel") }}
+            {{ formulario.username(class="form-control") }}
+        </div>
+        <div class="form-group inputBox">
+            {{ formulario.senha.label(class="form-lavel") }}
+            {{ formulario.senha(class="form-control") }}
+        </div>
+        <div class="form-group buttons">
+            {{ formulario.salvar(class="btn btn-success btn-salvar") }}
+            <a class="btn btn-primary" href="{{ url_for('index') }}"> Voltar</a>
+        </div>
+    </fieldset>
+
+</form>
+
+{% endblock %}
